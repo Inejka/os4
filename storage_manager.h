@@ -35,6 +35,16 @@ class storage_manager {
 
     void print_file(normal_file *file, std::string shift);
 
+    int get_folder_size(folder *fold);
+
+    void copy_folder(folder *from, folder *to);
+
+    void copy_file(folder *to, normal_file *copy);
+
+    folder *create_folder(folder *to_create, std::string const &name);
+
+    normal_file *create_file(folder *to_create, std::string const &name, int size);
+
 public:
     storage_manager(int blockSize, int blockCount);
 
@@ -55,6 +65,10 @@ public:
     void move_file(std::string const &path, std::string const &name, std::string const &new_path,
                    std::string const &new_name);
 
+    int get_total_size();
+
+    void copy_file(std::string const &path, std::string const &name, std::string const &copy_path,
+                   std::string const &new_name);
 
 };
 

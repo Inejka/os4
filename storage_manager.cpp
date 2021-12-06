@@ -14,10 +14,7 @@ storage_manager::storage_manager(int blockSize, int blockCount) : block_size(blo
 
 void storage_manager::create_folder(const std::string &path, const std::string &name) {
     folder *where_to_create = path_name_check(path, name);
-    if (!is_name_free(where_to_create, name))
-        throw std::invalid_argument("Name already taken");
-    file *new_folder = new folder(name);
-    where_to_create->add_file(new_folder);
+    create_folder(where_to_create, name);
 }
 
 folder *storage_manager::path_name_check(const std::string &path, const std::string &name) {
@@ -55,13 +52,7 @@ bool storage_manager::is_name_free(folder *fold, std::string name) {
 
 void storage_manager::create_file(const std::string &path, const std::string &name, int size) {
     folder *where_to_create = path_name_check(path, name);
-    int first_block = find_block_to_insert(size);
-    normal_file *new_file = new normal_file(size, name);
-    new_file->setFirstBlock(first_block);
-    new_file->setLastBlock(size + first_block);
-    mark_blocks(first_block, first_block + size, true);
-    where_to_create->add_file((file *) new_file);
-
+    create_file(where_to_create, name, size);
 }
 
 int storage_manager::find_block_to_insert(const int &size) {
@@ -166,7 +157,7 @@ void storage_manager::read_from_file(const std::string &path, const std::string 
 
 void storage_manager::move_file(const std::string &path, const std::string &name, const std::string &new_path,
                                 const std::string &new_name) {
-    if (new_path.find(path+"/"+name) != std::string::npos)
+    if (new_path.find(path + "/" + name) != std::string::npos)
         throw std::invalid_argument("Invalid new path");
     folder *old_location = path_name_check(path, name);
     file *to_move = get_file(old_location, name);
@@ -175,3 +166,74 @@ void storage_manager::move_file(const std::string &path, const std::string &name
     to_move->setName(new_name);
     new_location->add_file(to_move);
 }
+
+int storage_manager::get_folder_size(folder *fold) {
+    int to_return = 0;
+    for (auto &i: fold->getFileList()) {
+        if (i->is_folder())
+            to_return += get_folder_size((folder *) i);
+        else {
+            to_return += ((normal_file *) i)->getLastBlock() - ((normal_file *) i)->getFirstBlock();
+        }
+    }
+    return to_return;
+}
+
+int storage_manager::get_total_size() {
+    return get_folder_size((folder *) root);
+}
+
+void storage_manager::copy_file(const std::string &path, const std::string &name, const std::string &copy_path,
+                                std::string const &new_name) {
+
+    folder *from_location = path_name_check(path, name);
+    file *to_copy = get_file(from_location, name);
+    folder *to_location = path_name_check(copy_path, name);
+    if (!is_name_free(to_location, new_name))
+        throw std::invalid_argument("Name already taken");
+    if (to_copy->is_folder()) {
+        folder *temp_folder = new folder(new_name);
+        //auto new_folder = create_folder(to_location, new_name);
+        copy_folder((folder *) to_copy, temp_folder);
+        to_location->add_file(temp_folder);
+    } else
+        copy_file(to_location, (normal_file *) to_copy);
+
+}
+
+void storage_manager::copy_file(folder *to, normal_file *copy) {
+    auto *new_file = create_file(to, copy->getName(), copy->getLastBlock() - copy->getFirstBlock());
+    for (int i = 0; i < copy->getLastBlock() - copy->getFirstBlock(); i++)
+        storage[i + new_file->getFirstBlock()] = storage[i + copy->getFirstBlock()];
+}
+
+normal_file *storage_manager::create_file(folder *to_create, const std::string &name, int size) {
+    if (!is_name_free(to_create, name))
+        throw std::invalid_argument("Name already taken");
+    int first_block = find_block_to_insert(size);
+    normal_file *new_file = new normal_file(size, name);
+    new_file->setFirstBlock(first_block);
+    new_file->setLastBlock(size + first_block);
+    mark_blocks(first_block, first_block + size, true);
+    to_create->add_file((file *) new_file);
+    return new_file;
+}
+
+void storage_manager::copy_folder(folder *from, folder *to) {
+    for (auto &i: from->getFileList()) {
+        if (i->is_folder()) {
+            auto new_fold = create_folder(to, i->getName());
+            copy_folder((folder *) i, new_fold);
+        } else copy_file(to, (normal_file *) i);
+    }
+}
+
+folder *storage_manager::create_folder(folder *to_create, const std::string &name) {
+    if (!is_name_free(to_create, name))
+        throw std::invalid_argument("Name already taken");
+    file *new_folder = new folder(name);
+    to_create->add_file(new_folder);
+    return (folder *) new_folder;
+}
+
+

@@ -20,17 +20,29 @@ int main() {
     std::vector<int> data = std::vector<int>(50);
     for (int i = 0; i < 50; i++)
         data[i] = i % 5;
-    storage_manager test = storage_manager(10, 10);
+    storage_manager test = storage_manager(10, 200);
     test.create_folder("", "f1");
+    test.create_folder("f1", "f2");
+    test.create_folder("f1", "f3");
+    test.create_file("f1/f2", "fi1", 5);
+    test.write_to_file("f1/f2", "fi1", data);
+    test.print_system_with_data();
     test.create_folder("", "f2");
-    test.create_folder("f1", "f1inf1");
+    test.copy_file("", "f1", "f1D","test");
+    test.print_system_with_data();
+    /*test.create_folder("f1", "f1inf1");
     test.create_folder("f1/f1inf1", "f1inf1inf1");
     test.create_folder("f1/f1inf1", "f2inf1inf1");
     test.create_file("f1", "fi1", 5);
     test.create_file("f1", "fi2", 5);
+    test.create_file("f1", "fi3", 2);
+    test.create_file("f1", "fi4", 3);
+    test.create_file("f1", "fi5", 4);
+    test.create_file("f1", "fi6", 1);
     test.print_system_with_data();
     test.move_file("", "f1", "f2", "test");
     test.print_system_with_data();
+    std::cout << test.get_total_size();*/
     /*test.remove_folder("", "f1");
     test.create_file("", "fi1", 5);
     test.write_to_file("", "fi1", data);
