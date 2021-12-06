@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/DaNTe/CLionProjects/os4/block.h
+vector
+-
+iostream
+-
+
+C:/Users/DaNTe/CLionProjects/os4/files.h
+string
+-
+list
+-
+
+C:/Users/DaNTe/CLionProjects/os4/main.cpp
+iostream
+-
+block.h
+C:/Users/DaNTe/CLionProjects/os4/block.h
+storage_manager.h
+C:/Users/DaNTe/CLionProjects/os4/storage_manager.h
+files.h
+C:/Users/DaNTe/CLionProjects/os4/files.h
+
+C:/Users/DaNTe/CLionProjects/os4/storage_manager.h
+files.h
+C:/Users/DaNTe/CLionProjects/os4/files.h
+block.h
+C:/Users/DaNTe/CLionProjects/os4/block.h
+string
+-
+vector
+-
+

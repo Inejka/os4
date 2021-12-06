@@ -1,0 +1,3 @@
+C:/Users/DaNTe/CLionProjects/os4/cmake-build-debug/CMakeFiles/os4.dir
+C:/Users/DaNTe/CLionProjects/os4/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/DaNTe/CLionProjects/os4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
