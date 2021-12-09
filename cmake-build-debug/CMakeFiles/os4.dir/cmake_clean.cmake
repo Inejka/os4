@@ -1,10 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/os4.dir/files.cpp.obj"
-  "CMakeFiles/os4.dir/main.cpp.obj"
-  "CMakeFiles/os4.dir/storage_manager.cpp.obj"
-  "libos4.dll.a"
-  "os4.exe"
-  "os4.exe.manifest"
+  "CMakeFiles/os4.dir/main.cpp.o"
+  "CMakeFiles/os4.dir/storage_manager.cpp.o"
+  "os4"
   "os4.pdb"
 )
 
